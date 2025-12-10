@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VulnFriend - Your Security Practice Buddy</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Ubuntu+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="buttons">
+                <span class="close"></span>
+                <span class="minimize"></span>
+                <span class="maximize"></span>
+            </div>
+            <span class="title">VulnFriend v1.0</span>
+        </div>
+        <div class="terminal-body">
+            <div class="ascii-art">
+<pre>
+   __     ______     ______     ______     ______     ______    
+  /\ \   /\  ___\   /\  ___\   /\  ___\   /\  ___\   /\  ___\   
+ _\_\ \  \ \  __\   \ \___  \  \ \___  \  \ \  __\   \ \___  \  
+/\_____\  \ \_____\  \/\_____\  \/\_____\  \ \_____\  \/\_____\ 
+\/_____/   \/_____/   \/_____/   \/_____/   \/_____/   \/_____/ 
+</pre>
+            </div>
+            
+            <div class="typewriter">
+                <p class="greeting">>>> Hey friend! I'm VulnFriend, your intentionally vulnerable companion.</p>
+                <p class="subtitle">I contain 10+ security flaws waiting for you to discover and fix!</p>
+            </div>
+            
+            <div class="modules">
+                <div class="module-card" onclick="location.href='/login'">
+                    <h3>🔓 Login Panel</h3>
+                    <p>Broken Authentication & Session Management</p>
+                    <span class="difficulty easy">Easy</span>
+                </div>
+                
+                <div class="module-card" onclick="location.href='/search?q=test'">
+                    <h3>🔍 User Search</h3>
+                    <p>SQL Injection & Information Disclosure</p>
+                    <span class="difficulty medium">Medium</span>
+                </div>
+                
+                <div class="module-card" onclick="location.href='#xss'">
+                    <h3>💬 Comment System</h3>
+                    <p>Cross-Site Scripting (XSS)</p>
+                    <span class="difficulty easy">Easy</span>
+                </div>
+                
+                <div class="module-card" onclick="location.href='/debug'">
+                    <h3>🐛 Debug Info</h3>
+                    <p>Security Misconfiguration</p>
+                    <span class="difficulty hard">Hard</span>
+                </div>
+            </div>
+            
+            <div class="hint-box">
+                <h4>💡 Friend's Hint:</h4>
+                <p>Try searching for: <code>' OR '1'='1</code> in the search box</p>
+                <p>Admin credentials might be weak...</p>
+            </div>
+            
+            <div class="xss-section" id="xss">
+                <h3>XSS Playground</h3>
+                <form action="/comment" method="POST" class="xss-form">
+                    <input type="text" name="comment" placeholder="Try: <script>alert('XSS')</script>">
+                    <button type="submit">Post Comment</button>
+                </form>
+            </div>
+            
+            <div class="terminal-footer">
+                <p>Status: <span class="status-online">● VULNERABLE</span></p>
+                <p>Your IP: <span id="client-ip">Detecting...</span></p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/script.js"></script>
+</body>
+</html>

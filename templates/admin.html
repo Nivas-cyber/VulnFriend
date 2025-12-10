@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - VulnFriend</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .admin-alert {
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid gold;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .admin-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .admin-card {
+            background: rgba(0, 100, 255, 0.1);
+            border: 1px solid #0066ff;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .admin-card.danger {
+            background: rgba(255, 0, 0, 0.1);
+            border-color: #ff5555;
+        }
+        
+        .admin-card.danger h3 {
+            color: #ff5555;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .data-table th, .data-table td {
+            border: 1px solid #444;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .data-table th {
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--hacker-green);
+        }
+        
+        .secret-data {
+            color: #ff5555;
+            font-family: monospace;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="buttons">
+                <span class="close"></span>
+                <span class="minimize"></span>
+                <span class="maximize"></span>
+            </div>
+            <span class="title">⚡ VulnFriend - Admin Panel</span>
+        </div>
+        
+        <div class="terminal-body">
+            <div class="admin-alert">
+                <h2>⚠️ RESTRICTED ACCESS - ADMIN PANEL ⚠️</h2>
+                <p>This page contains sensitive information and functionality!</p>
+            </div>
+            
+            <div class="admin-features">
+                <div class="admin-card danger">
+                    <h3>🔓 Database Access</h3>
+                    <p>Full database dump:</p>
+                    <button onclick="showDatabase()" style="width: 100%; padding: 10px; margin: 10px 0;">
+                        Dump Database
+                    </button>
+                    <div id="databaseDump" class="secret-data"></div>
+                </div>
+                
+                <div class="admin-card danger">
+                    <h3>🛠️ System Commands</h3>
+                    <p>Execute system commands:</p>
+                    <input type="text" id="systemCmd" placeholder="Enter command" style="width: 100%; padding: 10px; margin: 10px 0;">
+                    <button onclick="executeCommand()" style="width: 100%; padding: 10px;">
+                        Execute
+                    </button>
+                    <div id="commandOutput" class="secret-data"></div>
+                </div>
+                
+                <div class="admin-card">
+                    <h3>👥 All Users</h3>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Password</th>
+                                <th>Email</th>
+                                <th>Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTable">
+                            <!-- Filled by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px; color: #ff5555;">
+                <h3>⚠️ Security Vulnerabilities:</h3>
+                <ul>
+                    <li>No authorization check for admin access</li>
+                    <li>Direct database exposure</li>
+                    <li>Command execution without sanitization</li>
+                    <li>Sensitive data in plain text</li>
+                </ul>
+            </div>
+            
+            <div class="back-link" style="text-align: center; margin-top: 30px;">
+                <a href="/dashboard">← Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Fetch all users
+        fetch('/search?q=')
+            .then(response => response.json())
+            .then(users => {
+                const table = document.getElementById('usersTable');
+                users.forEach(user => {
+                    const row = table.insertRow();
+                    row.innerHTML = `
+                        <td>${user[0]}</td>
+                        <td>${user[1]}</td>
+                        <td>${user[2]}</td>
+                        <td>${user[3]}</td>
+                        <td>${user[4] ? 'Yes' : 'No'}</td>
+                    `;
+                });
+            });
+        
+        function showDatabase() {
+            fetch('/debug')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('databaseDump').textContent = 
+                        JSON.stringify(data, null, 2);
+                });
+        }
+        
+        function executeCommand() {
+            const cmd = document.getElementById('systemCmd').value;
+            fetch(`/ping?host=127.0.0.1; ${encodeURIComponent(cmd)}`)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('commandOutput').textContent = data;
+                });
+        }
+        
+        // Auto-load some data
+        showDatabase();
+    </script>
+</body>
+</html>

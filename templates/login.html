@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - VulnFriend</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--matrix-green);
+            border-radius: 10px;
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #444;
+            color: white;
+            border-radius: 5px;
+            font-family: 'Ubuntu Mono', monospace;
+        }
+        
+        .login-form button {
+            width: 100%;
+            padding: 12px;
+            background: var(--matrix-green);
+            color: black;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        .vulnerability-hint {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid #ff5555;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            color: #ff9999;
+        }
+        
+        .vulnerability-hint h4 {
+            color: #ff5555;
+            margin-top: 0;
+        }
+        
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .back-link a {
+            color: var(--hacker-green);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="buttons">
+                <span class="close"></span>
+                <span class="minimize"></span>
+                <span class="maximize"></span>
+            </div>
+            <span class="title">VulnFriend - Login Portal</span>
+        </div>
+        
+        <div class="terminal-body">
+            <div class="login-container">
+                <h2 style="text-align: center; margin-bottom: 30px;">🔐 Login System</h2>
+                
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div style="color: #ff5555; text-align: center; margin-bottom: 20px;">
+                            {{ messages[0] }}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                
+                <form class="login-form" action="/login" method="POST">
+                    <input type="text" name="username" placeholder="Username" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <button type="submit">Login</button>
+                </form>
+                
+                <div class="vulnerability-hint">
+                    <h4>💡 Friend's Hint:</h4>
+                    <p>I heard the admin might be using weak credentials...</p>
+                    <p>Try common passwords like: <code>admin123</code>, <code>password</code>, <code>123456</code></p>
+                    <p>Or maybe there's SQL injection here? Try: <code>' OR '1'='1</code> in username field</p>
+                </div>
+                
+                <div class="back-link">
+                    <a href="/">← Back to Home</a>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px; color: #666;">
+                <h4>🔓 Vulnerabilities in this page:</h4>
+                <ul>
+                    <li>No password hashing (plain text storage)</li>
+                    <li>Potential SQL injection in login query</li>
+                    <li>No rate limiting on login attempts</li>
+                    <li>No account lockout mechanism</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
